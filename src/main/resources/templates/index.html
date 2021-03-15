@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script>//验证表单是否为空，若为空则将焦点聚焦在input表单上，否则表单通过，登录成功
+function check(form) {
+    var accountName = $("#accountName").val(), password = $("#password").val();
+    if (!accountName || accountName == "") {
+        showMsg("请输入用户名");
+        form.accountName.focus();
+        return false;
+    }
+    if (!password || password == "") {
+        showMsg("请输入密码");
+        form.password.focus();
+        return false;
+    }
+//这里为用ajax获取用户信息并进行验证，如果账户密码不匹配则登录失败，如不需要验证用户信息，这段可不写
+    $.ajax({
+        url: "/test/hello",// 获取自己系统后台用户信息接口
+        data: {"password": password, "username": accountName},
+        type: "POST",
+        dataType: "json",
+        success: function (data) {
+            console.log('data:', data);
+            if (data.RETURNBACKCODE) {
+                if (data.RETURNBACKCODE == "0000") { //判断返回值，这里根据的业务内容可做调整
+                    console.log(data);
+                    window.location.href = "/success/successland";//指向登录的页面地址
+                } else {
+                    showMsg(data.RETURNBACK);
+                    return false;
+                }
+            }
+        },
+        error: function (data) {
+            showMsg(data.message);
+        }
+    });
+}
+
+//错误信息提醒
+function showMsg(msg) {
+    $("#CheckMsg").text(msg);
+}
+
+//监听回车键提交
+$(function () {
+    document.onkeydown = keyDownSearch;
+
+    function keyDownSearch(e) {
+        // 兼容FF和IE和Opera
+        var theEvent = e || window.event;
+        var code = theEvent.keyCode || theEvent.which || theEvent.charCode;
+        if (code == 13) {
+            $('#submit').click();//具体处理函数
+            return false;
+        }
+        return true;
+    }
+});</script>
+<style>
+    .content {
+        padding: 0 auto;
+        margin: 0 auto;
+        height: 450px;
+        width: 100%;
+        background-size: 100% 450px;
+        margin-top: 25px;
+    }
+
+    .login-wrap {
+        position: absolute;
+        width: 320px;
+        height: 300px;
+        border-radius: 10px;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        right: 200px;
+        margin-top: 75px;
+        background-color: azure;
+        background-size: 100%;
+    }
+
+    .login-wrap h3 {
+        color: #FF0000;
+        font-size: 18px;
+        text-align: center;
+    }
+
+    .name, .code {
+        border: 1px solid #fff;
+        width: 230px;
+        height: 40px;
+        margin-left: 25px;
+        margin-bottom: 20px;
+        padding-left: 40px;
+    }
+
+    .name {
+        background-color: aquamarine;
+        background-position-x: 12px;
+    }
+
+    .code {
+        background-color: aquamarine;
+        background-position-x: 12px;
+    }
+
+    .btn input {
+        height: 40px;
+        width: 120px;
+        float: left;
+        margin-right: 25px;
+        border: none;
+        color: #fff;
+        font-size: 16px;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        border-radius: 10px;
+        margin-top: 10px;
+        cursor: pointer;
+    }
+
+    input:active {
+        border-color: #147a62
+    }
+
+    .submit {
+        background: #ea8c37;
+        margin-left: 25px;
+    }
+
+    .reset {
+        background: #bbb;
+    }
+
+    /**错误信息提醒**/
+    .msg {
+        color: #ea8c37;
+        font-size: 14px;
+        padding-left: 40px;
+        padding-top: 10px;
+        clear: both;
+        font-weight: bold;
+    }
+
+    body {
+        width: 1080px;
+        height: 650px;
+        background-color: #ea8c37;
+    }
+</style>
+<head>
+    <meta charset="UTF-8">
+    <title>登陆界面</title>
+</head>
+<body>
+<div class="content">
+    <div class="login-wrap">
+        <form id="user_login" action="">
+            <h3>登 录</h3>
+            <input class="name" name="" id="accountName" type="text" placeholder="请输入用户名">
+            <input class="code" name="password" id="password" type="password" placeholder="请输入密码">
+            <div class="btn">
+                <input type="button" id="submit" class="submit" value="登录" onclick="return check(this.form);">
+                <input type="reset" id="reset" class="reset" value="重置">
+            </div>
+            <div id="CheckMsg" class="msg"></div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

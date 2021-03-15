@@ -1,0 +1,36 @@
+package com.springboot.demo.designMode.interpreter;
+
+/**
+ * A variable expression implements BooleanExp
+ * A terminal expression
+ */
+
+import java.util.*;
+
+public class VariableExp implements BooleanExp {
+    private String name;
+
+    public VariableExp(String _name) {
+        name = _name;
+    }
+
+    @Override
+    public boolean Evaluate(Context c) {
+        return c.LookUp(name);
+    }
+
+    @Override
+    public BooleanExp Copy() {
+        return new VariableExp(name);
+    }
+
+    @Override
+    public BooleanExp Replace(String var, BooleanExp exp) {
+        if (var.equals(name)) {
+            return exp.Copy();
+        } else {
+            return new VariableExp(name);
+        }
+    }
+
+}

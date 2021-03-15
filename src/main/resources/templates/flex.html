@@ -1,0 +1,42 @@
+<!--
+ * @Descripttion:
+ * @Author: 陈婷
+ * @Email: chent72@chinaunicom.cn
+ * @Date: 2020-11-20 14:37:52
+ * @LastEditors: Please set LastEditors
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>flex</title>
+    <style>
+        .contain {
+            display: flex;
+        }
+
+        aside {
+            flex: 0 0 180px;
+            background-color: #ccf;
+        }
+
+        main {
+            flex: 1;
+            background-color: #ccffcc;
+        }
+    </style>
+</head>
+<body>
+<header style="background-color: #ccc;">我的信息管理系统</header>
+<div class="contain">
+    <aside>目录栏</aside>
+    <main>
+        <h1>登陆成功页面！！</h1>
+        <!--获取后台跳转带入值：key-->
+        <span th:text="${key}"></span>
+    </main>
+</div>
+<footer style="background-color: #ffc;">底部</footer>
+</body>
+</html>
